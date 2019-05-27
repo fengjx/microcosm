@@ -12,13 +12,21 @@ import (
 var db *gorm.DB
 
 type AppDB struct {
+	dbConfig *DbConfig
+}
+
+type DbConfig struct {
+	Dialect string
+	Url     string
 }
 
 func (appDB *AppDB) Start(config *conf.Config) {
+	appDB.initConfig(config)
+	dbConfig := appDB.dbConfig
 	var err error
-	db, err = gorm.Open(config.GetString("db", "dialect"), config.GetString("db", "link"))
+	db, err = gorm.Open(dbConfig.Dialect, dbConfig.Url)
 	if err != nil {
-		log.Fatalln("AppDB start error")
+		log.Fatalln("AppDB start error", err)
 		return
 	}
 
@@ -36,6 +44,16 @@ func (appDB *AppDB) Stop(config *conf.Config) {
 	} else {
 		log.Info("AppDB stoped")
 	}
+}
+
+func (appDB *AppDB) initConfig(config *conf.Config) {
+	dbConfig := new(DbConfig)
+	dbConfig.Dialect = "mysql"
+	err := config.GetCfg().Section("db").MapTo(dbConfig)
+	if err != nil {
+		log.Fatalln("get db config error", err)
+	}
+	appDB.dbConfig = dbConfig
 }
 
 func New() *AppDB {
