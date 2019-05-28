@@ -17,14 +17,14 @@ type AppDB struct {
 
 type DbConfig struct {
 	Dialect string
-	Url     string
+	Link     string
 }
 
 func (appDB *AppDB) Start(config *conf.Config) {
 	appDB.initConfig(config)
 	dbConfig := appDB.dbConfig
 	var err error
-	db, err = gorm.Open(dbConfig.Dialect, dbConfig.Url)
+	db, err = gorm.Open(dbConfig.Dialect, dbConfig.Link)
 	if err != nil {
 		log.Fatalln("AppDB start error", err)
 		return
