@@ -2,8 +2,8 @@ package test
 
 import (
 	"github.com/jinzhu/gorm"
-	"microcosm/db"
-	"microcosm/module/test/model"
+	"microcosm/internal/db"
+	"microcosm/internal/model"
 )
 
 func FindList() ([]*model.Test, error) {

@@ -6,7 +6,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	log "github.com/sirupsen/logrus"
-	"microcosm/conf"
+	"microcosm/internal/config"
 )
 
 var db *gorm.DB
@@ -20,7 +20,7 @@ type DbConfig struct {
 	Link     string
 }
 
-func (appDB *AppDB) Start(config *conf.Config) {
+func (appDB *AppDB) Start(config *config.Config) {
 	appDB.initConfig(config)
 	dbConfig := appDB.dbConfig
 	var err error
@@ -37,7 +37,7 @@ func (appDB *AppDB) Start(config *conf.Config) {
 	log.Info("AppDB started")
 }
 
-func (appDB *AppDB) Stop(config *conf.Config) {
+func (appDB *AppDB) Stop(config *config.Config) {
 	err := db.Close()
 	if err != nil {
 		log.Error("AppDB stop error", err)
@@ -46,7 +46,7 @@ func (appDB *AppDB) Stop(config *conf.Config) {
 	}
 }
 
-func (appDB *AppDB) initConfig(config *conf.Config) {
+func (appDB *AppDB) initConfig(config *config.Config) {
 	dbConfig := new(DbConfig)
 	dbConfig.Dialect = "mysql"
 	err := config.GetCfg().Section("db").MapTo(dbConfig)

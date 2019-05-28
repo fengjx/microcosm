@@ -4,10 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli"
 	"io"
-	"microcosm/conf"
-	"microcosm/db"
-	"microcosm/pkg/app"
-	"microcosm/routers"
+	"microcosm/internal/config"
+	"microcosm/internal/db"
+	"microcosm/internal/pkg/app"
+	"microcosm/internal/routers"
 	"os"
 )
 
@@ -34,7 +34,7 @@ var startFlags = []cli.Flag{
 }
 
 func startAction(ctx *cli.Context) error {
-	config := conf.New(ctx)
+	config := config.New(ctx)
 	f, _ := os.Create(config.GetLogConfig().Accesslog)
 	gin.DefaultWriter = io.MultiWriter(f)
 	// 如果需要同时将日志写入文件和控制台，请使用以下代码。

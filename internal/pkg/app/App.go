@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"microcosm/conf"
+	"microcosm/internal/config"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,7 +12,7 @@ import (
 )
 
 type App struct {
-	config   *conf.Config
+	config   *config.Config
 	starters []Starter
 	routers  []RouteStarter
 	engine   *gin.Engine
@@ -26,7 +26,7 @@ func (app *App) AddRouter(rs RouteStarter) {
 	app.routers = append(app.routers, rs)
 }
 
-func (app *App) Start(config *conf.Config) {
+func (app *App) Start(config *config.Config) {
 	app.config = config
 	app.initLogger()
 	app.initStarter()

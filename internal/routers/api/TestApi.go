@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"microcosm/module/test"
+	"microcosm/internal/module/test"
 	"net/http"
 )
 
