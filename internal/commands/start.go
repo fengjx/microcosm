@@ -34,17 +34,20 @@ var startFlags = []cli.Flag{
 }
 
 func startAction(ctx *cli.Context) error {
-	config := config.New(ctx)
-	f, _ := os.Create(config.GetLogConfig().Accesslog)
-	gin.DefaultWriter = io.MultiWriter(f)
-	// 如果需要同时将日志写入文件和控制台，请使用以下代码。
-	//gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	conf := config.New(ctx)
+	f, _ := os.Create(conf.GetLogConfig().Accesslog)
+	if conf.IsDebug() {
+		// 如果需要同时将日志写入文件和控制台，请使用以下代码。
+		gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	} else {
+		gin.DefaultWriter = io.MultiWriter(f)
+	}
 	engine := gin.New()
 	engine.Use(gin.Logger(), gin.Recovery())
 
 	server := app.New(engine)
 	server.AddRouter(routers.NewAppRouter())
 	server.AddStarter(db.New())
-	server.Start(config)
+	server.Start(conf)
 	return nil
 }
