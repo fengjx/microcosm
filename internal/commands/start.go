@@ -34,7 +34,7 @@ var startFlags = []cli.Flag{
 }
 
 func startAction(ctx *cli.Context) error {
-	conf := config.New(ctx)
+	conf := config.Init(ctx)
 	f, _ := os.Create(conf.GetLogConfig().Accesslog)
 	if conf.IsDebug() {
 		// 如果需要同时将日志写入文件和控制台，请使用以下代码。

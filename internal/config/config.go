@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -102,10 +103,19 @@ func (config *Config) GetCfg() *ini.File {
 	return config.cfg
 }
 
-func New(ctx *cli.Context) *Config {
-	config := new(Config)
-	config.init(ctx)
-	return config
+var once sync.Once
+var appConfig *Config
+
+func Init(ctx *cli.Context) *Config {
+	once.Do(func() {
+		appConfig = new(Config)
+		appConfig.init(ctx)
+	})
+	return appConfig
+}
+
+func GetConfig() Config {
+	return *appConfig
 }
 
 func (config *Config) GetString(section string, key string) string {

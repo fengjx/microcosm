@@ -12,14 +12,12 @@ type AppRouter struct {
 }
 
 func (r *AppRouter) Start(config *config.Config, engine *gin.Engine) {
-	authorized := engine.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"fjx": "123",
-	}))
+	apiv1 := engine.Group("/api/v1")
 	{
-		authorized.POST("/sys/user/add", v1.AddSysUser)
-		authorized.GET("/sys/user/list", v1.ListSysUser)
+		apiv1.POST("/sys/user/add", v1.AddSysUser)
+		apiv1.GET("/sys/user/list", v1.ListSysUser)
 	}
-
+	engine.NoRoute(api.Index)
 	engine.GET("/hello", api.Hello)
 	engine.GET("/test/list", api.TestList)
 	log.Info("Approuter started")

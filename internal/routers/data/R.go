@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-const codeOk = 1
-const codeErr = 0
-const msgOk = "success"
-const msgErr = "error"
-
 type R struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
@@ -17,24 +12,39 @@ type R struct {
 }
 
 func Ok() *R {
-	return OkMsg(msgOk)
+	return OkMsg(RespCodeOk.msg)
 }
 
 func OkMsg(msg string) *R {
 	r := new(R)
-	r.Code = codeOk
+	r.Code = RespCodeOk.code
 	r.Msg = msg
 	return r
 }
 
 func Err() *R {
-	return OkMsg(msgErr)
+	return OkMsg(RespCodeErr.msg)
 }
 
 func ErrMsg(msg string) *R {
 	r := new(R)
-	r.Code = codeErr
+	r.Code = RespCodeErr.code
 	r.Msg = msg
+	return r
+}
+
+func Build(respCode RespCode) *R {
+	r := new(R)
+	r.Code = respCode.code
+	r.Msg = respCode.msg
+	return r
+}
+
+func BuildData(respCode RespCode, data interface{}) *R {
+	r := new(R)
+	r.Code = respCode.code
+	r.Msg = respCode.msg
+	r.Data = data
 	return r
 }
 
