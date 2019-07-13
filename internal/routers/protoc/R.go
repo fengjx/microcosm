@@ -48,12 +48,14 @@ func BuildData(respCode RespCode, data interface{}) *R {
 	return r
 }
 
-func ResSuccess(c *gin.Context, data R) {
-	c.JSON(http.StatusOK, data)
+func ResSuccess(c *gin.Context, data interface{}) {
+	r := BuildData(RespCodeOk, data)
+	c.JSON(http.StatusOK, r)
 }
 
-func ResError(c *gin.Context, data R) {
-	c.JSON(http.StatusInternalServerError, data)
+func ResError(c *gin.Context, msg string) {
+	r := ErrMsg(msg)
+	c.JSON(http.StatusInternalServerError, r)
 }
 
 func ResData(c *gin.Context, data R, httpcode int) {

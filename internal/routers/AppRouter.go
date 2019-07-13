@@ -22,11 +22,11 @@ func (r *AppRouter) Start(config *config.Config, engine *gin.Engine) {
 	engine.NoRoute(api.Index)
 	engine.GET("/hello", api.Hello)
 	engine.GET("/test/list", api.TestList)
+	engine.POST("/login", api.Login)
 	log.Info("Approuter started")
 }
 
 func (r *AppRouter) Stop(config *config.Config, engine *gin.Engine) {
-
 	log.Info("Approuter stop")
 }
 

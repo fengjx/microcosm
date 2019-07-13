@@ -15,6 +15,7 @@ type Config struct {
 	appConfig    *AppConfig
 	serverConfig *ServerConfig
 	logConfig    *LogConfig
+	users        map[string]string
 }
 
 type AppConfig struct {
@@ -57,6 +58,7 @@ func (config *Config) init(ctx *cli.Context) {
 	config.initAppConfig()
 	config.initServerConfig()
 	config.initLogConfig()
+	config.initUsers()
 	config.coverCliConfig(ctx)
 }
 
@@ -90,6 +92,11 @@ func (config *Config) initServerConfig() {
 	if err != nil {
 		log.Fatalln("initServerConfig error", err)
 	}
+}
+
+func (config *Config) initUsers() {
+	users := config.cfg.Section("users").KeysHash()
+	config.users = users
 }
 
 func (config *Config) coverCliConfig(ctx *cli.Context) {
@@ -136,6 +143,10 @@ func (config *Config) GetServerConfig() ServerConfig {
 
 func (config *Config) GetLogConfig() LogConfig {
 	return *config.logConfig
+}
+
+func (config *Config) GetUsers() map[string]string {
+	return config.users
 }
 
 func (config *Config) IsDebug() bool {

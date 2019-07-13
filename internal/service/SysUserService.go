@@ -55,8 +55,7 @@ func (receiver *SysUserService) GetSysUserById(id uint32) model.SysUser {
 
 func (receiver SysUserService) FindSysUserList(offset int8, limit uint, orderBy string) ([]model.SysUser,  error) {
 	var users []model.SysUser
-	orm := db.GetDB()
-	err := orm.Offset(offset).Limit(limit).Order(orderBy).Find(&users).Error
+	err := receiver.orm.Offset(offset).Limit(limit).Order(orderBy).Find(&users).Error
 	return users, err
 }
 
