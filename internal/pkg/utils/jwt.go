@@ -8,8 +8,7 @@ import (
 
 var jwtSecret = []byte("microsom-1024")
 
-
-type Claims struct {
+type JwtClaims struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	jwt.StandardClaims
@@ -20,12 +19,12 @@ func GenJwtToken(username, password string) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(24 * time.Hour)
 
-	claims := Claims{
-		Md5(username),
+	claims := JwtClaims{
+		username,
 		Md5(password),
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer: "microsom",
+			Issuer:    "microsom",
 		},
 	}
 
@@ -36,13 +35,13 @@ func GenJwtToken(username, password string) (string, error) {
 }
 
 // ParseToken parsing token
-func ParseJwtToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+func ParseJwtToken(token string) (*JwtClaims, error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &JwtClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 
 	if tokenClaims != nil {
-		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
+		if claims, ok := tokenClaims.Claims.(*JwtClaims); ok && tokenClaims.Valid {
 			return claims, nil
 		}
 	}

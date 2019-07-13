@@ -1,10 +1,12 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"microcosm/internal/pkg/utils"
 	"microcosm/internal/routers/form"
 	"microcosm/internal/routers/protoc"
 	"microcosm/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -24,4 +26,16 @@ func Login(c *gin.Context) {
 		return
 	}
 	protoc.ResError(c, "用户名密码错误")
+}
+
+func LoginInfo(c *gin.Context) {
+	claims, _ := c.Get("login-info")
+	jwtClaims := claims.(*utils.JwtClaims)
+	data := map[string]string{"username": jwtClaims.Username}
+	data["avatar"] = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+	protoc.ResSuccess(c, data)
+}
+
+func Logout(c *gin.Context) {
+	protoc.ResOk(c)
 }

@@ -1,14 +1,15 @@
 package protoc
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type R struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 func Ok() *R {
@@ -18,7 +19,7 @@ func Ok() *R {
 func OkMsg(msg string) *R {
 	r := new(R)
 	r.Code = RespCodeOk.code
-	r.Msg = msg
+	r.Message = msg
 	return r
 }
 
@@ -29,23 +30,28 @@ func Err() *R {
 func ErrMsg(msg string) *R {
 	r := new(R)
 	r.Code = RespCodeErr.code
-	r.Msg = msg
+	r.Message = msg
 	return r
 }
 
 func Build(respCode RespCode) *R {
 	r := new(R)
 	r.Code = respCode.code
-	r.Msg = respCode.msg
+	r.Message = respCode.msg
 	return r
 }
 
 func BuildData(respCode RespCode, data interface{}) *R {
 	r := new(R)
 	r.Code = respCode.code
-	r.Msg = respCode.msg
+	r.Message = respCode.msg
 	r.Data = data
 	return r
+}
+
+func ResOk(c *gin.Context) {
+	r := Ok()
+	c.JSON(http.StatusOK, r)
 }
 
 func ResSuccess(c *gin.Context, data interface{}) {
