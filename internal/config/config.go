@@ -126,16 +126,16 @@ func (config *Config) GetString(section string, key string) string {
 	return val.String()
 }
 
-func (config *Config) GetAppConfig() *AppConfig {
-	return config.appConfig
+func (config *Config) GetAppConfig() AppConfig {
+	return *config.appConfig
 }
 
-func (config *Config) GetServerConfig() *ServerConfig {
-	return config.serverConfig
+func (config *Config) GetServerConfig() ServerConfig {
+	return *config.serverConfig
 }
 
-func (config *Config) GetLogConfig() *LogConfig {
-	return config.logConfig
+func (config *Config) GetLogConfig() LogConfig {
+	return *config.logConfig
 }
 
 func (config *Config) IsDebug() bool {
