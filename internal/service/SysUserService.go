@@ -31,8 +31,8 @@ func (receiver *SysUserService) AddUser(data *form.AddSysUserForm) error {
 
 func (receiver *SysUserService) save(sysUser *model.SysUser) error {
 	orm := db.GetDB()
-	orm.Create(&sysUser)
-	return nil
+	err := orm.Create(&sysUser).Error
+	return err
 }
 
 func GetSysUserService() *SysUserService {

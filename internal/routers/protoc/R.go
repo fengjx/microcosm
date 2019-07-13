@@ -1,4 +1,4 @@
-package data
+package protoc
 
 import (
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func OkMsg(msg string) *R {
 }
 
 func Err() *R {
-	return OkMsg(RespCodeErr.msg)
+	return ErrMsg(RespCodeErr.msg)
 }
 
 func ErrMsg(msg string) *R {
@@ -48,10 +48,27 @@ func BuildData(respCode RespCode, data interface{}) *R {
 	return r
 }
 
+func ResSuccess(c *gin.Context, data R) {
+	c.JSON(http.StatusOK, data)
+}
+
+func ResError(c *gin.Context, data R) {
+	c.JSON(http.StatusInternalServerError, data)
+}
+
+func ResData(c *gin.Context, data R, httpcode int) {
+	c.JSON(httpcode, data)
+}
+
+func ResCode(c *gin.Context, respCode RespCode, httpcode int) {
+	r := Build(respCode)
+	c.JSON(httpcode, r)
+}
+
 func Res(c *gin.Context, err error) {
 	if err == nil {
 		c.JSON(http.StatusOK, Ok())
 	} else {
-		c.JSON(http.StatusInternalServerError, Ok())
+		c.JSON(http.StatusInternalServerError, Err())
 	}
 }

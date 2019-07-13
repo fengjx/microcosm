@@ -114,8 +114,8 @@ func Init(ctx *cli.Context) *Config {
 	return appConfig
 }
 
-func GetConfig() Config {
-	return *appConfig
+func GetConfig() *Config {
+	return appConfig
 }
 
 func (config *Config) GetString(section string, key string) string {
