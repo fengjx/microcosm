@@ -13,11 +13,13 @@ var (
 	loginService = service.GetLoginService()
 )
 
+// Login 后台登录
 func Login(c *gin.Context) {
 	var loginForm form.LoginForm
 	var err error
-	if err = c.ShouldBind(&loginForm); err != nil {
-		protoc.ErrMsg("情输入用户名和密码")
+	if err = c.ShouldBind(&loginForm); err != nil || loginForm.Username == "" {
+		protoc.ResError(c, "情输入用户名和密码")
+		return
 	}
 	token := loginService.Login(loginForm)
 	if token != "" {

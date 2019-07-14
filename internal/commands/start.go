@@ -46,8 +46,8 @@ func startAction(ctx *cli.Context) error {
 	engine.Use(gin.Logger(), gin.Recovery())
 
 	server := app.New(engine)
-	server.AddRouter(routers.NewAppRouter())
 	server.AddStarter(db.New())
+	server.AddRouter(routers.NewAppRouter())
 	server.Start(conf)
 	return nil
 }

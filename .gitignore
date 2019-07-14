@@ -254,3 +254,4 @@ package-lock.json
 yarn.lock
 
 static
+debug

@@ -17,7 +17,7 @@ type AppDB struct {
 
 type DbConfig struct {
 	Dialect string
-	Link     string
+	Link    string
 }
 
 func (appDB *AppDB) Start(config *config.Config) {
@@ -57,10 +57,13 @@ func (appDB *AppDB) initConfig(config *config.Config) {
 }
 
 func New() *AppDB {
-	db := new(AppDB)
-	return db
+	appDB := new(AppDB)
+	return appDB
 }
 
-func GetDB() *gorm.DB {
+func GetOrm() *gorm.DB {
+	if db == nil {
+		log.Fatalln("AppDB is not start")
+	}
 	return db
 }

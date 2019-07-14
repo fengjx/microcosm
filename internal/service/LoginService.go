@@ -15,7 +15,11 @@ func init() {
 type LoginService struct {
 }
 
+// Login 校验用户名密码
 func (receiver *LoginService) Login(form form.LoginForm) (token string) {
+	if form.Username == "" {
+		return ""
+	}
 	users := config.GetConfig().GetUsers()
 	pwd := users[form.Username]
 	if pwd == form.Password {
