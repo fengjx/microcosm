@@ -26,7 +26,7 @@ func (userService *UserService) AddUser(data *form.AddUserForm) error {
 	user.Username = data.Username
 	user.Email = data.Email
 	user.Mobile = data.Mobile
-	user.CreateTime = time.Now()
+	user.CreateTime = model.TimeImplementedMarshaler(time.Now())
 	user.Status = model.UserStatusNotValid
 	user.Salt = utils.RandString(4)
 	user.Password = utils.Md5("123456" + user.Salt)
@@ -46,7 +46,7 @@ func (userService *UserService) save(user *model.User) error {
 // DeleteUser 根据id删除用户
 func (userService *UserService) DeleteUser(id int64) error {
 	user := new(model.User)
-	user.Id = id
+	user.ID = id
 	return db.GetOrm().Delete(user).Error
 }
 
