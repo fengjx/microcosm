@@ -23,10 +23,14 @@ func (r *AppRouter) Start(config *config.Config, engine *gin.Engine) {
 		apiv1.GET("/sys/user/list", v1.ListUser)
 		apiv1.GET("/sys/dict/page-list", v1.DictPageList)
 	}
+	authAPI := engine.Group("/")
+	authAPI.Use(jwt.JwtHandler())
+	{
+		authAPI.GET("/logout", api.Logout).Use(jwt.JwtHandler())
+		authAPI.GET("/login-info", api.LoginInfo).Use(jwt.JwtHandler())
+	}
+	engine.GET("/config", api.Config)
 	engine.POST("/login", api.Login)
-	engine.GET("/logout", api.Logout).Use(jwt.JwtHandler())
-	engine.GET("/login-info", api.LoginInfo).Use(jwt.JwtHandler())
-	engine.NoRoute(api.Index)
 	engine.GET("/hello", api.Hello)
 	log.Info("Approuter started")
 }
